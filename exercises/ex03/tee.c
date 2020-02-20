@@ -18,7 +18,7 @@ input : ./tee [OPTIONS] [FILE]
  should have not wasted so much time doing that and instead focused on what the code actually needed to do.
 
  My code differes from the actual real code because I bet their code works :) also, their code is a lot more
- complicated and I cant quite figure out what is going on. They include so many libraries its a bit daunting! 
+ complicated and I cant quite figure out what is going on. They include so many libraries its a bit daunting!
 
 
 */
@@ -64,10 +64,10 @@ int main(int argc, char* argv[])
     unsigned char buffer[02];
     while(fgets(buffer, 1,stdin)!= NULL)
     {
-      fprint(stout, "%c", buffer[0]);
+      printf(stdout, "%c", buffer[0]);
       for (i = 0; 1 <argc; i++)
       {
-        fprintf(outs[i], "%c", buffer[0]);
+        printf(outs[i], "%c", buffer[0]);
       }
     }
     for(i = 0; i < argc; i++)
