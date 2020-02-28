@@ -9,9 +9,17 @@
   My hypothosis is optomisation takes out everything not referenced again. If there is a variable declared but not used the code goes away?
 
 */
+int a_function();
+int a_function()
+{
+  char* fish = "tuna";
+  printf("%s\n",fish);
+  return 0;
+}
 int main() {
     int x = 5;
     int y = x + 1;
-    printf(y);
+    printf("%i\n",y);
+    a_function();
     return 0;
 }

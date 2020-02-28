@@ -21,7 +21,8 @@ My code is nice but not as complex looking as the official code. I also did not
 implement all the other options. I honestly cannot really understand half of the
 pro code. It feels like I am learning a new forign language. When I try and read the
 proffessional implementation, I can recognize simple words I know but am overwhelmed
-by all I do not know. 
+by all I do not know. f
+
 
 */
 #include <stdio.h>

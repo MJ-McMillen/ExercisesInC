@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
-#include "miniunit.h"
+#include "minunit.h"
 #include "util.c"
 #include "trout.h"
 

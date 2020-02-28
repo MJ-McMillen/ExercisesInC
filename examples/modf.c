@@ -33,6 +33,16 @@ returns: new array, caller must free
 */
 // TODO: Write this function
 
+int get_int_part(double *array, int length)
+{
+  double final[] = {};
+  int convert_i = 0;
+  for ( int i=0; i <length; i++){
+    final[i] = array[i];
+  }
+  return *final;
+}
+
 void test_get_int_part()
 {
     double array[] = {1.2, 2.718, 3.1412, 5.6};
