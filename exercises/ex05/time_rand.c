@@ -1,5 +1,9 @@
 /*  Test code for the functions in rand.c
 
+my_random float is the fastest float.
+random_double is the dastest double. 
+
+
 Copyright 2016 Allen B. Downey
 License: MIT License https://opensource.org/licenses/MIT
 */
@@ -52,8 +56,24 @@ double time_func(int iters, float(*func)())
     return t1 - t0;
 }
 
+double double_time_func(int iters, double(*func)())
+{
+    int i;
+    double d;
+    double t0, t1;
 
-main(int argc, char *argv[])
+    srandom(time(NULL));
+
+    t0 = get_seconds();
+    for (i=0; i<iters; i++) {
+        d = func();
+    }
+    t1 = get_seconds();
+    return t1 - t0;
+}
+
+
+int main(int argc, char *argv[])
 {
     double time;
     int iters = 100000000;
@@ -76,4 +96,10 @@ main(int argc, char *argv[])
 
     time = time_func(iters, random_float);
     printf("%f ms \t random_float\n", time);
+
+    time = double_time_func(iters, random_double);
+    printf("%f ms \t random_double\n", time);
+
+    time = double_time_func(iters, my_random_double);
+    printf("%f ms \t my_random_double\n", time);
 }
