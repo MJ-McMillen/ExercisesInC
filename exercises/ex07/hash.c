@@ -8,6 +8,7 @@ License: Creative Commons Attribution-ShareAlike 3.0
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 
 
 // VALUE: represents a value in a key-value pair
@@ -179,6 +180,12 @@ int hash_hashable(Hashable *hashable)
 int equal_int (void *ip, void *jp)
 {
     // FILL THIS IN!
+    int i = *(int *) ip;
+    int j = *(int *) jp;
+    if(i==j)
+    {
+      return 1;
+    }
     return 0;
 }
 
@@ -193,6 +200,13 @@ int equal_int (void *ip, void *jp)
 int equal_string (void *s1, void *s2)
 {
     // FILL THIS IN!
+    char *a = (char *) s1;
+    char *b = (char *) s2;
+
+    if(strcmp(a,b))
+    {
+      return 1;
+    }
     return 0;
 }
 
@@ -208,6 +222,12 @@ int equal_string (void *s1, void *s2)
 int equal_hashable(Hashable *h1, Hashable *h2)
 {
     // FILL THIS IN!
+    int a = hash_hashable(h1);
+    int b = hash_hashable(h2);
+    if (a == b)
+    {
+      return 1;
+    }
     return 0;
 }
 
@@ -297,6 +317,22 @@ Node *prepend(Hashable *key, Value *value, Node *rest)
 Value *list_lookup(Node *list, Hashable *key)
 {
     // FILL THIS IN!
+    //Note: I am a bit confused on why i do not seem to need to
+    //use my magic wand of dereferencing everywhere... it works but
+    // i used the delete the stars until it works method of debugging...
+
+    if(list == NULL) // checkin to see if we got anything
+    {
+      return NULL;
+    }
+    while (list != NULL)
+    {
+      if(equal_hashable(key, list->key)==1)
+      {
+        return list->value;
+      }
+      list=list->next;
+    }
     return NULL;
 }
 
@@ -341,7 +377,20 @@ void print_map(Map *map)
 /* Adds a key-value pair to a map. */
 void map_add(Map *map, Hashable *key, Value *value)
 {
-    // FILL THIS IN!
+    int new = abs(hash_hashable(key)) % map->n;
+
+    // if its empty...
+    if(map->lists[new]== NULL)
+      {
+        Node *newNode = make_node(key,value,NULL);
+        map->lists[new] = newNode;
+      }
+    // if we are adding to an exsisting one.
+    else
+      {
+        Node *newNode = prepend(key,value, map->lists[new]);
+        map->lists[new]=newNode;
+      }
 }
 
 
@@ -349,7 +398,8 @@ void map_add(Map *map, Hashable *key, Value *value)
 Value *map_lookup(Map *map, Hashable *key)
 {
     // FILL THIS IN!
-    return NULL;
+    int blep = abs(hash_hashable(key))%map->n;
+    return list_lookup(map->lists[blep],key);
 }
 
 
