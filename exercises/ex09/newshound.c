@@ -3,6 +3,10 @@
 Downloaded from https://github.com/twcamper/head-first-c
 
 Modified by Allen Downey.
+
+It did not print out the other books because the c script ended when the python
+one did? when the children were killed first, the c script did not end and
+the rest of the articles appeared. Hooray. 
 */
 
 #include <stdio.h>
@@ -39,14 +43,48 @@ int main(int argc, char *argv[])
     char *search_phrase = argv[1];
     char var[255];
 
-    for (int i=0; i<num_feeds; i++) {
-        sprintf(var, "RSS_FEED=%s", feeds[i]);
-        char *vars[] = {var, NULL};
+    // adding my code there
 
-        int res = execle(PYTHON, PYTHON, SCRIPT, search_phrase, NULL, vars);
-        if (res == -1) {
-            error("Can't run script.");
+    pid_t pid;
+    int status;
+
+    for (int i=0; i<num_feeds;i++)
+    {
+      printf("Creating child %d.\n",i);
+      sprintf(var,"RSS_FEED=%s",feeds[i]);
+      char *vars[]={var,NULL};
+      pid=fork();
+
+      if (pid == -1) {
+            fprintf(stderr, "fork failed ): %s\n", strerror(errno));
+            perror(argv[0]);
+            exit(1);
         }
+      if (pid ==0)
+      {
+        // kill the children solve the problem
+        int res = execle(PYTHON, PYTHON, SCRIPT, search_phrase, NULL, vars);
+        if (res == -1)
+           {
+             error("Can't run script.");
+           }
+      }
+
+    }
+
+
+    for (int i=0; i<num_feeds; i++) {
+        pid = wait(&status);
+
+        if (pid == -1) {
+            fprintf(stderr, "wait failed: %s\n", strerror(errno));
+            perror(argv[0]);
+            exit(1);
+        }
+
+        // check the exit status of the child
+        status = WEXITSTATUS(status);
+        printf("Child %d exited with error code %d.\n", pid, status);
     }
     return 0;
 }

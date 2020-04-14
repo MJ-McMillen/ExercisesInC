@@ -14,6 +14,16 @@ License: MIT License https://opensource.org/licenses/MIT
 #include <sys/types.h>
 #include <wait.h>
 
+// creating a global variable for testing
+int testing_123_global = 42; // for the global test
+
+//creating a struct to test for heap because structs
+//are stored on heap
+typedef struct {
+  int testing_123_heap;
+} heap_test;
+
+
 
 // errno is an external global variable that contains
 // error information
@@ -30,10 +40,26 @@ double get_seconds() {
 }
 
 
-void child_code(int i)
+void child_code(int i,heap_test *hep)
 {
     sleep(i);
     printf("Hello from child %d.\n", i);
+
+    /* First Test: showing that global variables are shared
+    - i think that global should be shared. I proved it by printing the thing below
+    */
+    printf("Testing global %i for child %d\n",testing_123_global,i);
+
+    /* The two different threads have two different stacks.
+    They do not proccess the two print functions in order so
+    they must be on different stacks.
+    */
+
+    printf("Testing heap %i for child %d\n",hep->testing_123_heap,i );
+
+    /* And look at dat. Since the structure exsists on the heap, each
+    thread has access to it. */
+    i=5;
 }
 
 // main takes two parameters: argc is the number of command-line
@@ -45,6 +71,8 @@ int main(int argc, char *argv[])
     pid_t pid;
     double start, stop;
     int i, num_children;
+    heap_test test_struct;
+    test_struct.testing_123_heap = 14;
 
     // the first command-line argument is the name of the executable.
     // if there is a second, it is the number of children to create.
@@ -72,7 +100,7 @@ int main(int argc, char *argv[])
 
         /* see if we're the parent or the child */
         if (pid == 0) {
-            child_code(i);
+            child_code(i,&test_struct);
             exit(i);
         }
     }
