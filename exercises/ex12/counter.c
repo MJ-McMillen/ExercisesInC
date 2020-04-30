@@ -3,6 +3,14 @@
 Copyright 2014 Allen Downey
 License: GNU GPLv3
 
+Q1:
+The final value is correct. there are 5 children and it produced 5.
+
+Q2: Yes. The threads seem to be running concurrently. We see this because though the
+final counter is correct, the individual counters are not due to the threads accessing
+things out of order. 
+
+
 */
 
 #include <stdio.h>
