@@ -55,7 +55,15 @@ void print_list(Node **list) {
 */
 int pop(Node **list) {
     // FILL THIS IN!
-    return 0;
+    Node *current = *list;
+    if (current==NULL)
+    {
+        return -1;
+    }
+    *list = current->next;
+    int val = current->val;
+    free(current);
+    return val;
 }
 
 
@@ -66,21 +74,58 @@ int pop(Node **list) {
 */
 void push(Node **list, int val) {
     // FILL THIS IN!
+    Node *current = *list; // so i dont have *s everywhere
+    //If the list is empty, i need to make a node before I add a val
+    if(current == NULL)
+    {
+        *list = make_node(val, NULL);
+        return;
+      }
+    else
+    {//add it to the node and make it next.
+      while(current->next!=NULL) //cycle through nexts until we find the end
+      {
+        current = current->next;
+      }
+      current->next = make_node(val, NULL);//add node.
+      return;
+    }
 }
 
 
 /* Removes the first element with the given value
 *
 * Frees the removed node.
-*
+*  }
+
 * list: pointer to pointer to Node
 * val: value to remove
 *
 * returns: number of nodes removed
 */
 int remove_by_value(Node **list, int val) {
-    // FILL THIS IN!
-    return 0;
+    Node *current = *list;
+    Node *previous = NULL; // so I can keep from breaking the list
+    // handling the nothing is there case
+    if (current == NULL)
+    {
+      return 0;
+    }
+    else
+    {
+      while(current->next!=NULL)
+      {
+        if (current->val==val)
+        {
+          previous->next = current->next;
+          free(current);
+          return 1;
+        }
+        previous = current;
+        current = current->next;
+      }
+      return 0;
+    }
 }
 
 
@@ -91,7 +136,27 @@ int remove_by_value(Node **list, int val) {
 * list: pointer to pointer to Node
 */
 void reverse(Node **list) {
-    // FILL THIS IN!
+  Node* end = *list;
+  //For Empty/ 1 element lists. (reverse of 1 element is the same as itself.)
+  if((end == NULL)|(end->next == NULL)){
+    return;
+  }
+
+  Node *current = end->next;
+  Node *new = current->next;
+  current->next = end;
+  end->next = NULL;
+
+  //Swicharoo time
+  while(new != NULL){
+    end = current;
+    current = new;
+    new = new->next;
+    current->next = end;
+  }
+
+  //Point list to new beginning node
+  *list = current;
 }
 
 
